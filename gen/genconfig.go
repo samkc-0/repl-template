@@ -13,7 +13,7 @@ package main
 var (
     replName     = "{{.Name}}"
     prompt       = "{{.Name}} > "
-    exitMessage  = "exiting {{.Name}}... bye!"
+    exitMessage  = "Closing the {{.Name}}... Goodbye!"
 )
 `
 
