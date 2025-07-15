@@ -5,13 +5,13 @@ This is a template for making CLIs. You can rename it at build time to something
 
 ⸻
 
-features
+## features
 
 - define REPL name at build time (e.g. `make myrepl`)
 - injects prompt + messages into generated config.go
 - runs as interactive REPL (`go run .`) or binary (`./myrepl`)
 
-Makefile commands:
+## Makefile commands:
 
 - `make <name>` → build binary
 - `make config NAME=<name>` → generate config only
@@ -19,7 +19,7 @@ Makefile commands:
 
 ⸻
 
-usage
+## usage
 
 build and run as binary:
 
