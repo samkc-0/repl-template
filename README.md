@@ -6,13 +6,16 @@ This is a template for making CLIs. You can rename it at build time to something
 ⸻
 
 features
-• define REPL name at build time (e.g. `make myrepl`)
-• injects prompt + messages into generated config.go
-• runs as interactive REPL (`go run .`) or binary (`./myrepl`)
-• Makefile with support for:
-• `make <name>` → build binary
-• `make config NAME=<name>` → generate config only
-• `make clean` → remove binary + config
+
+- define REPL name at build time (e.g. `make myrepl`)
+- injects prompt + messages into generated config.go
+- runs as interactive REPL (`go run .`) or binary (`./myrepl`)
+
+Makefile commands:
+
+- `make <name>` → build binary
+- `make config NAME=<name>` → generate config only
+- `make clean` → remove binary + config
 
 ⸻
 
