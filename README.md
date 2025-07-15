@@ -1,7 +1,7 @@
 # repl-template
 
 a minimal go REPL scaffold with dynamic build-time config.
-This is a template for making CLIs. You can rename is at build time to something like 'myrepl' 😎 etc., and it will have the corresponding prompt + exit message.
+This is a template for making CLIs. You can rename it at build time to something like 'myrepl' 😎 etc., and it will have the corresponding prompt + exit message.
 
 ⸻
 
