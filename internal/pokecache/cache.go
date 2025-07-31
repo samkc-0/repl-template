@@ -17,17 +17,40 @@ type Cache struct {
 }
 
 func NewCache(interval time.Duration) (Cache, error) {
-	return Cache{}, nil
+	c := Cache{}
+	go c.reapLoop(interval)
+	return c, nil
 }
 
-func (c Cache) Add(key string, val []byte) error {
-	return nil
+func (c Cache) Add(key string, val []byte) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.cache[key] = cacheEntry{created_at: time.Now(), val: val}
 }
 
 func (c Cache) Get(key string) (cacheEntry, error) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
 	entry, ok := c.cache[key]
 	if !ok {
 		return cacheEntry{}, fmt.Errorf("no cache entry with key: %s", key)
 	}
 	return entry, nil
+}
+
+func (c Cache) reapLoop(interval time.Duration) {
+	ticker := time.NewTicker(interval)
+	defer ticker.Stop()
+	for {
+		select {
+		case <-ticker.C:
+			c.mu.Lock()
+			for key, entry := range c.cache {
+				if time.Since(entry.created_at) > interval {
+					delete(c.cache, key)
+				}
+			}
+			c.mu.Unlock()
+		}
+	}
 }
