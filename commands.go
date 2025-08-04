@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/samkc/repl-template/internal/pokeapi"
+	"github.com/samkc-0/repl-template/internal/pokeapi"
 )
 
 type config struct {
@@ -42,6 +42,10 @@ func getCommands() map[string]cliCommand {
 			description: "Displays the previous page of location areas",
 			callback:    commandMapb,
 		},
+		"explore": {
+			name: "explore",
+			description: commandExplore,
+		}
 	}
 }
 
@@ -93,5 +97,10 @@ func commandMapb(cfg *config) error {
 	for _, loc := range response.Results {
 		fmt.Println(loc.Name)
 	}
+	return nil
+}
+
+
+func commandExplore(cfg *config) error {
 	return nil
 }

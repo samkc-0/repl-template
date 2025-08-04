@@ -1,7 +1,6 @@
 package pokecache
 
 import (
-	"fmt"
 	"sync"
 	"time"
 )
@@ -28,14 +27,14 @@ func (c Cache) Add(key string, val []byte) {
 	c.cache[key] = cacheEntry{created_at: time.Now(), val: val}
 }
 
-func (c Cache) Get(key string) (cacheEntry, error) {
+func (c Cache) Get(key string) ([]byte, bool) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	entry, ok := c.cache[key]
 	if !ok {
-		return cacheEntry{}, fmt.Errorf("no cache entry with key: %s", key)
+		return nil, false
 	}
-	return entry, nil
+	return entry.val, true
 }
 
 func (c Cache) reapLoop(interval time.Duration) {

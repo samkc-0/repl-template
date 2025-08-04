@@ -3,7 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/samkc/repl-template/internal/pokeapi"
+	"github.com/samkc-0/repl-template/internal/pokeapi"
 	"log"
 	"os"
 	"strings"
