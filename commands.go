@@ -43,9 +43,10 @@ func getCommands() map[string]cliCommand {
 			callback:    commandMapb,
 		},
 		"explore": {
-			name: "explore",
-			description: commandExplore,
-		}
+			name:        "explore",
+			description: "Explore the pokemon in a location area.\nusage: explore <location name>",
+			callback:    commandExplore,
+		},
 	}
 }
 
@@ -99,7 +100,6 @@ func commandMapb(cfg *config) error {
 	}
 	return nil
 }
-
 
 func commandExplore(cfg *config) error {
 	return nil
