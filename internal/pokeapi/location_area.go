@@ -26,6 +26,24 @@ type LocationAreaPokemonEncounters struct {
 	} `json:"pokemon_encounters"`
 }
 
+type Pokemon struct {
+	Name           string `json:"name"`
+	BaseExperience int    `json:"base_experience"`
+	Height         int    `json:"height"`
+	Weight         int    `json:"weight"`
+	Types          []struct {
+		Type struct {
+			Name string `json:"name"`
+		}
+	}
+	Stats []struct {
+		BaseStat int `json:"base_stat"`
+		Stat     struct {
+			Name string `json:"name"`
+		}
+	}
+}
+
 func (client *Client) ListLocations(pageUrl *string) (LocationAreaResponse, error) {
 	url := baseUrl + "/location-area"
 	if pageUrl != nil {
@@ -55,6 +73,19 @@ func (client *Client) GetLocationDetails(locationName string) (LocationAreaPokem
 		return LocationAreaPokemonEncounters{}, err
 	}
 	return pokemonEncounters, nil
+}
+
+func (client *Client) GetPokemonDetails(pokemonName string) (Pokemon, error) {
+	url := baseUrl + "/pokemon/" + pokemonName
+	data, err := fetchPokeapi(client, url)
+	if err != nil {
+		return Pokemon{}, err
+	}
+	var pokemon Pokemon
+	if err := json.Unmarshal(data, &pokemon); err != nil {
+		return Pokemon{}, err
+	}
+	return pokemon, nil
 }
 
 func fetchPokeapi(client *Client, url string) ([]byte, error) {

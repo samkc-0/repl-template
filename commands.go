@@ -3,15 +3,16 @@ package main
 import (
 	"errors"
 	"fmt"
-	"os"
-
 	"github.com/samkc-0/repl-template/internal/pokeapi"
+	"math/rand"
+	"os"
 )
 
 type config struct {
 	pokeapiClient    pokeapi.Client
 	nextLocationsUrl *string
 	prevLocationsUrl *string
+	pokedex          map[string]pokeapi.Pokemon
 }
 
 type cliCommand struct {
@@ -46,6 +47,16 @@ func getCommands() map[string]cliCommand {
 			name:        "explore",
 			description: "Explore the pokemon in a location area.\nusage: explore <location name>",
 			callback:    commandExplore,
+		},
+		"catch": {
+			name:        "catch",
+			description: "catch the pokemon in a location area.\nusage: catch <location name>",
+			callback:    commandCatch,
+		},
+		"inspect": {
+			name:        "inspect",
+			description: "view the pokedex entry for a pokemon.\nusage: inspect <pokemon name>",
+			callback:    commandInspect,
 		},
 	}
 }
@@ -113,5 +124,29 @@ func commandExplore(cfg *config, args ...string) error {
 	for _, pokemonEncounter := range response.PokemonEncounters {
 		fmt.Println(pokemonEncounter.Pokemon.Name)
 	}
+	return nil
+}
+
+func commandCatch(cfg *config, args ...string) error {
+	if len(args) != 1 {
+		return errors.New("usage: explore <pokemon name>")
+	}
+	pokemonName := args[0]
+	pokemon, err := cfg.pokeapiClient.GetPokemonDetails(pokemonName)
+	if err != nil {
+		return err
+	}
+	fmt.Printf("Throwing a Pokeball at %s...", pokemonName)
+	success := rand.Intn(400) > pokemon.BaseExperience
+	if !success {
+		fmt.Printf("%s escaped!\n", pokemonName)
+		return nil
+	}
+	fmt.Printf("%s was caught!\n", pokemonName)
+	cfg.pokedex[pokemonName] = pokemon
+	return nil
+}
+
+func commandInspect(cfg *config, args ...string) error {
 	return nil
 }
