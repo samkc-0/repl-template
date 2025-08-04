@@ -2,6 +2,7 @@ package pokeapi
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 )
@@ -22,7 +23,7 @@ type LocationAreaPokemonEncounters struct {
 		Pokemon struct {
 			Name string `json:"name"`
 		} `json:"pokemon"`
-	}
+	} `json:"pokemon_encounters"`
 }
 
 func (client *Client) ListLocations(pageUrl *string) (LocationAreaResponse, error) {
@@ -45,12 +46,10 @@ func (client *Client) ListLocations(pageUrl *string) (LocationAreaResponse, erro
 
 func (client *Client) GetLocationDetails(locationName string) (LocationAreaPokemonEncounters, error) {
 	url := baseUrl + "/location-area/" + locationName
-
 	data, err := fetchPokeapi(client, url)
 	if err != nil {
 		return LocationAreaPokemonEncounters{}, err
 	}
-
 	var pokemonEncounters LocationAreaPokemonEncounters
 	if err := json.Unmarshal(data, &pokemonEncounters); err != nil {
 		return LocationAreaPokemonEncounters{}, err
@@ -69,6 +68,9 @@ func fetchPokeapi(client *Client, url string) ([]byte, error) {
 	}
 
 	response, err := client.httpClient.Do(request)
+	if response.StatusCode != 200 {
+		return nil, fmt.Errorf("%d error fetching location area: %s", response.StatusCode, url)
+	}
 	if err != nil {
 		return nil, err
 	}

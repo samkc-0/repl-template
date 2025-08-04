@@ -39,7 +39,7 @@ func repl(cfg *config) {
 				log.Fatalf("error in 'help' command: %v", err)
 			}
 		} else {
-			err := command.callback(cfg)
+			err := command.callback(cfg, input[1:]...)
 			if err != nil {
 				fmt.Println(err)
 			}
